@@ -1,6 +1,6 @@
 {
   "name": "pi-codex",
-  "version": "0.1.1",
+  "version": "0.1.2-ys",
   "description": "Use Codex from pi-coding-agent to review code or delegate tasks.",
   "keywords": [
     "pi-package",
@@ -19,13 +19,13 @@
   "engines": {
     "node": ">=18.18"
   },
-  "peerDependencies": {
-    "@mariozechner/pi-coding-agent": "*",
+  "dependencies": {
     "typebox": "*"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.4.0"
+    "@earendil-works/pi-coding-agent": "*",
+    "@types/node": "26.0.1",
+    "typescript": "6.0.3"
   },
   "pi": {
     "extensions": [

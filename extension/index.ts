@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import type {
   ExtensionAPI,
   ExtensionContext
-} from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
 
 type NotifyCtx = Pick<ExtensionContext, "ui">;

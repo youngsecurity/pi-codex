@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.2-ys
+
+### Fork maintenance — security patch
+
+Patched the `youngsecurity/pi-codex` fork to stop declaring the deprecated `@mariozechner/pi-coding-agent` package as an install-time peer dependency, eliminating npm audit findings:
+
+- **GHSA-jfgx-wxx8-mp94** (high): predictable temporary extension install paths allow local privilege escalation on shared Linux hosts.
+- **GHSA-7v5m-pr3q-6453** (low): potential XSS in HTML session exports via Markdown URL sanitization bypass.
+- **GHSA-r95r-rj6r-c39x** (low): auth.json write race could expose stored credentials.
+
+Modern npm auto-installs peer dependencies at install time. The extension should not require npm to install a Pi harness at runtime because the host Pi runtime provides the extension API at load time, and the current `import type` is erased from emitted JavaScript.
+
+#### Changes
+
+- `extension/index.ts` now imports Pi extension types from `@earendil-works/pi-coding-agent` instead of the deprecated `@mariozechner/pi-coding-agent` package.
+- `package.json` no longer declares any Pi harness package as a peer dependency; `@earendil-works/pi-coding-agent` is now a development-time dependency for typechecking only.
+- `package.json` now declares `typebox` as a runtime dependency (moved from peer) and updates dev dependencies to `@types/node@26.0.1` and `typescript@6.0.3`.
+
+Pi package behavior (extension, prompts, skills, Codex companion runtime) is unchanged.
+
 ## 0.1.0
 
 - Initial port of the OpenAI Codex Claude Code plugin to the pi-coding-agent runtime.
