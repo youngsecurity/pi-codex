@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.3-ys
+
+### Fork maintenance — Pi terminology cleanup
+
+Removed inherited harness-specific terminology from user-facing runtime output, prompts, docs, tests, and tracked paths so the package consistently describes Pi/current-session behavior.
+
+#### Changes
+
+- `/codex:setup` and `/codex:status` now describe the shared Codex runtime as the current session runtime.
+- Stop-gate review prompts now refer to the previous assistant turn and previous assistant response.
+- Runtime environment names now use Pi Codex names such as `PI_CODEX_DATA`, `PI_CODEX_ROOT`, `PI_CODEX_ENV_FILE`, and `PI_CODEX_PROJECT_DIR`.
+- The app-server client identity is now `Pi Codex`.
+- Documentation now reflects the maintained fork install path, maintained Pi package name, current dependency layout, and Pi-neutral runtime behavior.
+- Removed the obsolete package metadata directory whose path referenced the source harness.
+
 ## 0.1.2-ys
 
 ### Fork maintenance — security patch
@@ -22,14 +37,13 @@ Pi package behavior (extension, prompts, skills, Codex companion runtime) is unc
 
 ## 0.1.0
 
-- Initial port of the OpenAI Codex Claude Code plugin to the pi-coding-agent runtime.
-- Reuses the upstream Node.js companion runtime (`scripts/codex-companion.mjs` and `scripts/lib/*.mjs`) verbatim.
-- Replaces Claude Code wrapper layer with:
-  - Pi extension (`extension/index.ts`) that wires `session_start` / `session_shutdown` lifecycle, registers the `codex_ask` interactive tool, and provides extension-native commands `/codex:status`, `/codex:result`, `/codex:cancel`, `/codex:setup`, `/codex:gate`.
-  - Pi prompt templates for the model-driven flows: `/codex:review`, `/codex:adversarial-review`, `/codex:rescue`.
-  - Three internal skills (`codex-cli-runtime`, `codex-result-handling`, `gpt-5-4-prompting`) tagged `disable-model-invocation: true`.
-- Replaces the Claude Code Stop hook with a manual `/codex:gate` command. The pi-codex gate **never fails open**: it always runs a real Codex task (bypassing the upstream `stopReviewGate` config toggle), errors out cleanly if Codex is not set up, and treats any non-`ALLOW:` / non-`BLOCK:` output as a failure rather than a pass.
-- Sets both `PI_CODEX_ROOT` and the legacy `CLAUDE_PLUGIN_ROOT` to the package install directory so the upstream runtime is reused without forking the wider package.
+- Initial port of the upstream OpenAI Codex package integration to the pi-coding-agent runtime.
+- Reuses the upstream Node.js companion runtime (`scripts/codex-companion.mjs` and `scripts/lib/*.mjs`) with targeted fork patches.
+- Adds a Pi extension (`extension/index.ts`) that wires `session_start` / `session_shutdown` lifecycle, registers the `codex_ask` interactive tool, and provides extension-native commands `/codex:status`, `/codex:result`, `/codex:cancel`, `/codex:setup`, `/codex:gate`.
+- Adds Pi prompt templates for the model-driven flows: `/codex:review`, `/codex:adversarial-review`, `/codex:rescue`.
+- Adds three internal skills (`codex-cli-runtime`, `codex-result-handling`, `gpt-5-4-prompting`) tagged `disable-model-invocation: true`.
+- Replaces the automatic stop hook with a manual `/codex:gate` command. The pi-codex gate **never fails open**: it always runs a real Codex task, errors out cleanly if Codex is not set up, and treats any non-`ALLOW:` / non-`BLOCK:` output as a failure rather than a pass.
+- Sets `PI_CODEX_ROOT` to the package install directory so the companion runtime can locate prompts, schemas, scripts, and package data.
 
 ### Runtime patches (diverges from upstream codex-plugin-cc)
 

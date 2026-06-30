@@ -2,7 +2,7 @@ Copyright 2026 OpenAI
 Modifications Copyright 2026 diogo (pi-codex port for pi-coding-agent)
 
 This product includes software originally developed by OpenAI as the
-"codex" Claude Code plugin (https://github.com/openai/codex-plugin-cc),
+"codex" package integration (https://github.com/openai/codex-plugin-cc),
 ported to the pi-coding-agent runtime.
 
 Licensed under the Apache License, Version 2.0 (the "License");

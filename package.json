@@ -1,6 +1,6 @@
 {
   "name": "pi-codex",
-  "version": "0.1.2-ys",
+  "version": "0.1.3-ys",
   "description": "Use Codex from pi-coding-agent to review code or delegate tasks.",
   "keywords": [
     "pi-package",

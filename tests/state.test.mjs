@@ -18,8 +18,8 @@ import {
 
 test("resolveStateDir uses a temp-backed per-workspace directory", () => {
   const workspace = makeTempDir();
-  const previousPluginDataDir = process.env.CLAUDE_PLUGIN_DATA;
-  delete process.env.CLAUDE_PLUGIN_DATA;
+  const previousPluginDataDir = process.env.PI_CODEX_DATA;
+  delete process.env.PI_CODEX_DATA;
 
   try {
     const stateDir = resolveStateDir(workspace);
@@ -29,18 +29,18 @@ test("resolveStateDir uses a temp-backed per-workspace directory", () => {
     assert.match(stateDir, new RegExp(`^${os.tmpdir().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
   } finally {
     if (previousPluginDataDir == null) {
-      delete process.env.CLAUDE_PLUGIN_DATA;
+      delete process.env.PI_CODEX_DATA;
     } else {
-      process.env.CLAUDE_PLUGIN_DATA = previousPluginDataDir;
+      process.env.PI_CODEX_DATA = previousPluginDataDir;
     }
   }
 });
 
-test("resolveStateDir uses CLAUDE_PLUGIN_DATA when it is provided", () => {
+test("resolveStateDir uses PI_CODEX_DATA when it is provided", () => {
   const workspace = makeTempDir();
   const pluginDataDir = makeTempDir();
-  const previousPluginDataDir = process.env.CLAUDE_PLUGIN_DATA;
-  process.env.CLAUDE_PLUGIN_DATA = pluginDataDir;
+  const previousPluginDataDir = process.env.PI_CODEX_DATA;
+  process.env.PI_CODEX_DATA = pluginDataDir;
 
   try {
     const stateDir = resolveStateDir(workspace);
@@ -53,9 +53,9 @@ test("resolveStateDir uses CLAUDE_PLUGIN_DATA when it is provided", () => {
     );
   } finally {
     if (previousPluginDataDir == null) {
-      delete process.env.CLAUDE_PLUGIN_DATA;
+      delete process.env.PI_CODEX_DATA;
     } else {
-      process.env.CLAUDE_PLUGIN_DATA = previousPluginDataDir;
+      process.env.PI_CODEX_DATA = previousPluginDataDir;
     }
   }
 });

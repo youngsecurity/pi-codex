@@ -436,7 +436,7 @@ test("task-resume-candidate returns the latest rescue thread from the current se
   assert.equal(payload.candidate.threadId, "thr_current");
 });
 
-test("task --resume-last does not resume a task from another Claude session", () => {
+test("task --resume-last does not resume a task from another session", () => {
   const repo = makeTempDir();
   const binDir = makeTempDir();
   const statePath = path.join(binDir, "fake-codex-state.json");
@@ -480,7 +480,7 @@ test("task --resume-last does not resume a task from another Claude session", ()
   assert.equal(fakeState.lastTurnStart.prompt, "initial task");
 });
 
-test("task --resume-last ignores running tasks from other Claude sessions", () => {
+test("task --resume-last ignores running tasks from other sessions", () => {
   const repo = makeTempDir();
   const binDir = makeTempDir();
   installFakeCodex(binDir);
@@ -535,9 +535,9 @@ test("task --resume-last ignores running tasks from other Claude sessions", () =
   assert.match(resume.stderr, /No previous Codex task thread was found for this repository\./);
 });
 
-test("session start hook exports the Claude session id and plugin data dir for later commands", () => {
+test("session start hook exports the current session id and plugin data dir for later commands", () => {
   const repo = makeTempDir();
-  const envFile = path.join(makeTempDir(), "claude-env.sh");
+  const envFile = path.join(makeTempDir(), "pi-codex-env.sh");
   fs.writeFileSync(envFile, "", "utf8");
   const pluginDataDir = makeTempDir();
 
@@ -545,8 +545,8 @@ test("session start hook exports the Claude session id and plugin data dir for l
     cwd: repo,
     env: {
       ...process.env,
-      CLAUDE_ENV_FILE: envFile,
-      CLAUDE_PLUGIN_DATA: pluginDataDir
+      PI_CODEX_ENV_FILE: envFile,
+      PI_CODEX_DATA: pluginDataDir
     },
     input: JSON.stringify({
       hook_event_name: "SessionStart",
@@ -558,7 +558,7 @@ test("session start hook exports the Claude session id and plugin data dir for l
   assert.equal(result.status, 0, result.stderr);
   assert.equal(
     fs.readFileSync(envFile, "utf8"),
-    `export CODEX_COMPANION_SESSION_ID='sess-current'\nexport CLAUDE_PLUGIN_DATA='${pluginDataDir}'\n`
+    `export CODEX_COMPANION_SESSION_ID='sess-current'\nexport PI_CODEX_DATA='${pluginDataDir}'\n`
   );
 });
 
@@ -1026,7 +1026,7 @@ test("status shows phases, hints, and the latest finished job", () => {
   assert.match(result.stdout, /Resume in Codex: codex resume thr_done/);
 });
 
-test("status without a job id only shows jobs from the current Claude session", () => {
+test("status without a job id only shows jobs from the current session", () => {
   const workspace = makeTempDir();
   const stateDir = resolveStateDir(workspace);
   const jobsDir = path.join(stateDir, "jobs");
@@ -1285,7 +1285,7 @@ test("result returns the stored output for the latest finished job by default", 
   );
 });
 
-test("result without a job id prefers the latest finished job from the current Claude session", () => {
+test("result without a job id prefers the latest finished job from the current session", () => {
   const workspace = makeTempDir();
   const stateDir = resolveStateDir(workspace);
   const jobsDir = path.join(stateDir, "jobs");
@@ -1504,7 +1504,7 @@ test("cancel stops an active background job and marks it cancelled", async (t) =
   assert.match(fs.readFileSync(logFile, "utf8"), /Cancelled by user/);
 });
 
-test("cancel without a job id ignores active jobs from other Claude sessions", () => {
+test("cancel without a job id ignores active jobs from other sessions", () => {
   const workspace = makeTempDir();
   const stateDir = resolveStateDir(workspace);
   const jobsDir = path.join(stateDir, "jobs");
@@ -1559,7 +1559,7 @@ test("cancel without a job id ignores active jobs from other Claude sessions", (
   assert.equal(state.jobs[0].status, "running");
 });
 
-test("cancel with a job id can still target an active job from another Claude session", () => {
+test("cancel with a job id can still target an active job from another session", () => {
   const workspace = makeTempDir();
   const stateDir = resolveStateDir(workspace);
   const jobsDir = path.join(stateDir, "jobs");
@@ -1835,7 +1835,7 @@ test("stop hook runs a stop-time review task and blocks on findings when the rev
   const fakeState = JSON.parse(fs.readFileSync(fakeStatePath, "utf8"));
   assert.match(fakeState.lastTurnStart.prompt, /<task>/i);
   assert.match(fakeState.lastTurnStart.prompt, /<compact_output_contract>/i);
-  assert.match(fakeState.lastTurnStart.prompt, /Only review the work from the previous Claude turn/i);
+  assert.match(fakeState.lastTurnStart.prompt, /Only review the work from the previous assistant turn/i);
   assert.match(fakeState.lastTurnStart.prompt, /I completed the refactor and updated the retry logic\./);
 
   const status = run("node", [SCRIPT, "status"], {

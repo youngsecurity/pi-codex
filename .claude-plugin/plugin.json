@@ -1,8 +1,0 @@
-{
-  "name": "pi-codex",
-  "version": "0.1.0",
-  "description": "Use Codex from pi-coding-agent to review code or delegate tasks.",
-  "author": {
-    "name": "diogo"
-  }
-}

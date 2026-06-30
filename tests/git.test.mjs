@@ -93,14 +93,14 @@ test("collectReviewContext skips untracked directories in working tree review", 
   run("git", ["add", "app.js"], { cwd });
   run("git", ["commit", "-m", "init"], { cwd });
 
-  const nestedRepoDir = path.join(cwd, ".claude", "worktrees", "agent-test");
+  const nestedRepoDir = path.join(cwd, ".pi-codex", "worktrees", "agent-test");
   fs.mkdirSync(nestedRepoDir, { recursive: true });
   initGitRepo(nestedRepoDir);
 
   const target = resolveReviewTarget(cwd, { scope: "working-tree" });
   const context = collectReviewContext(cwd, target);
 
-  assert.match(context.content, /### \.claude\/worktrees\/agent-test\/\n\(skipped: directory\)/);
+  assert.match(context.content, /### \.pi-codex\/worktrees\/agent-test\/\n\(skipped: directory\)/);
 });
 
 test("collectReviewContext skips broken untracked symlinks instead of crashing", () => {

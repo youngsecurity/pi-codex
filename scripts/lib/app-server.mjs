@@ -16,17 +16,17 @@ import { parseBrokerEndpoint } from "./broker-endpoint.mjs";
 import { ensureBrokerSession, loadBrokerSession } from "./broker-lifecycle.mjs";
 import { terminateProcessTree } from "./process.mjs";
 
-const PLUGIN_MANIFEST_URL = new URL("../../.claude-plugin/plugin.json", import.meta.url);
-const PLUGIN_MANIFEST = JSON.parse(fs.readFileSync(PLUGIN_MANIFEST_URL, "utf8"));
+const PACKAGE_MANIFEST_URL = new URL("../../package.json", import.meta.url);
+const PACKAGE_MANIFEST = JSON.parse(fs.readFileSync(PACKAGE_MANIFEST_URL, "utf8"));
 
 export const BROKER_ENDPOINT_ENV = "CODEX_COMPANION_APP_SERVER_ENDPOINT";
 export const BROKER_BUSY_RPC_CODE = -32001;
 
 /** @type {ClientInfo} */
 const DEFAULT_CLIENT_INFO = {
-  title: "Codex Plugin",
-  name: "Claude Code",
-  version: PLUGIN_MANIFEST.version ?? "0.0.0"
+  title: "Pi Codex",
+  name: "Pi Codex",
+  version: PACKAGE_MANIFEST.version ?? "0.0.0"
 };
 
 /** @type {InitializeCapabilities} */

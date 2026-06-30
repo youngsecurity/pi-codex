@@ -18,9 +18,8 @@ const SESSION_HOOK = path.join(PACKAGE_ROOT, "scripts", "session-lifecycle-hook.
 const STOP_REVIEW_PROMPT_FILE = path.join(PACKAGE_ROOT, "prompts", "stop-review-gate.md");
 
 const SESSION_ID_ENV = "CODEX_COMPANION_SESSION_ID";
-const PLUGIN_DATA_ENV = "CLAUDE_PLUGIN_DATA";
+const PLUGIN_DATA_ENV = "PI_CODEX_DATA";
 const PLUGIN_ROOT_ENV = "PI_CODEX_ROOT";
-const LEGACY_ROOT_ENV = "CLAUDE_PLUGIN_ROOT";
 
 function generateSessionId(): string {
   return `pi-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
@@ -28,7 +27,6 @@ function generateSessionId(): string {
 
 function applyRuntimeEnv(): void {
   process.env[PLUGIN_ROOT_ENV] = PACKAGE_ROOT;
-  process.env[LEGACY_ROOT_ENV] = PACKAGE_ROOT;
   if (!process.env[PLUGIN_DATA_ENV]) {
     process.env[PLUGIN_DATA_ENV] = path.join(PACKAGE_ROOT, ".data");
   }
@@ -181,7 +179,7 @@ export default function (pi: ExtensionAPI): void {
       let prompt: string;
       try {
         prompt = fs.readFileSync(STOP_REVIEW_PROMPT_FILE, "utf8")
-          .replace(/\{\{CLAUDE_RESPONSE_BLOCK\}\}/g, "");
+          .replace(/\{\{ASSISTANT_RESPONSE_BLOCK\}\}/g, "");
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         ctx.ui.notify(`[codex:gate] Failed to load stop-review prompt: ${message}`, "error");
